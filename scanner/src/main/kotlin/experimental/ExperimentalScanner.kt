@@ -187,7 +187,7 @@ class ExperimentalScanner(
             // TODO: Move to function.
             // TODO: Verify that there are still missing scan results for the package, previous scan of another package
             //       from the same repository could have fixed that already.
-            scanners.filterIsInstance<PackageBasedRemoteScannerWrapper>().forEach { scanner ->
+            scanners.filterIsInstance<PackageScannerWrapper>().forEach { scanner ->
                 log.info { "Scanning ${pkg.id.toCoordinates()} with package based remote scanner ${scanner.name}." }
 
                 // Scan whole package with remote scanner.
@@ -239,7 +239,7 @@ class ExperimentalScanner(
         provenancesWithIncompleteScanResults.forEach { (provenance, scanners) ->
             // Scan provenances with remote scanners.
             // TODO: Move to function.
-            scanners.filterIsInstance<ProvenanceBasedRemoteScannerWrapper>().forEach { scanner ->
+            scanners.filterIsInstance<ProvenanceScannerWrapper>().forEach { scanner ->
                 log.info { "Scanning $provenance with provenance based remote scanner ${scanner.name}." }
 
                 // TODO: Use coroutines to execute scanners in parallel.
@@ -269,7 +269,7 @@ class ExperimentalScanner(
             }
 
             // Scan provenances with local scanners.
-            val localScanners = scanners.filterIsInstance<LocalScannerWrapper>()
+            val localScanners = scanners.filterIsInstance<PathScannerWrapper>()
             if (localScanners.isNotEmpty()) {
                 val localScanResults = scanLocal(provenance, localScanners, context)
 
@@ -442,9 +442,9 @@ class ExperimentalScanner(
 
     private fun scanLocal(
         provenance: KnownProvenance,
-        scanners: List<LocalScannerWrapper>,
+        scanners: List<PathScannerWrapper>,
         context: ScanContext
-    ): Map<LocalScannerWrapper, ScanResult> {
+    ): Map<PathScannerWrapper, ScanResult> {
         val downloadDir = try {
             provenanceDownloader.download(provenance)
         } catch (e: DownloadException) {

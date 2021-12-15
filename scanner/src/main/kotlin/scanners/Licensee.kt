@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
-import org.ossreviewtoolkit.scanner.experimental.LocalScannerWrapper
+import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -47,7 +47,7 @@ class Licensee(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
-) : LocalScanner(name, scannerConfig, downloaderConfig), LocalScannerWrapper {
+) : LocalScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
     class Factory : AbstractScannerFactory<Licensee>("Licensee") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             Licensee(scannerName, scannerConfig, downloaderConfig)
